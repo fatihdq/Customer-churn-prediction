@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custumer Churn Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous" />
+</head>
+<body>
+    <div class="container-sm mt-3" style="width: 50%">
+        <h1 class="text-center">Custumer Churn Prediction</h1>
+        <p class="text-center lead">Predict customer will be churn or not from the bank using data</p>
+    </div>
+    <div class="container-sm mt-5">
+        <form class="mt-5" id="form1">
+            <div class="row">
+                <label for="customerid" class="form-label">Customer ID</label>
+                <div class="col">
+                    <input class="form-control" type="text" id="customerid" placeholder="Customer ID that will predicted" required>
+                </div>
+                <div class="col">
+                    <button type="submit" value="" name="submit" class="btn btn-primary" id="form-submit" form="form1">Predict</button>
+                </div>
+            </div>
+        </form>
+
+        <div id="predict_result" class="mt-3" style="display: none">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">No.</th>
+                        <th scope="col">Customer ID</th>
+                        <th scope="col">Surname</th>
+                        <th scope="col">Credit Score</th>
+                        <th scope="col">Geography</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Age</th>
+                        <th scope="col">Tenure</th>
+                        <th scope="col">Balance</th>
+                        <th scope="col">Num Of Pruduct</th>
+                        <th scope="col">Has Credit Card</th>
+                        <th scope="col">Is Active Member</th>
+                        <th scope="col">Estimated Salary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row" id="RowNumber"></th>
+                        <td id="CustomerId"></td>
+                        <td id="Surname"></td>
+                        <td id="CreditScore"></td>
+                        <td id="Geography"></td>
+                        <td id="Gender"></td>
+                        <td id="Age"></td>
+                        <td id="Tenure"></td>
+                        <td id="Balance"></td>
+                        <td id="NumOfProducts"></td>
+                        <td id="HasCrCard"></td>
+                        <td id="IsActiveMember"></td>
+                        <td id="EstimatedSalary"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="text-center mt-2">
+                <p>Prediction for this customer likely</p>
+                <h3 id="output"></h3>
+            </div>
+        </div>
+        <table class="table mt-5">
+            <thead>
+                <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">Customer ID</th>
+                    <th scope="col">Surname</th>
+                    <th scope="col">Credit Score</th>
+                    <th scope="col">Geography</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">Age</th>
+                    <th scope="col">Tenure</th>
+                    <th scope="col">Balance</th>
+                    <th scope="col">Num Of Pruduct</th>
+                    <th scope="col">Has Credit Card</th>
+                    <th scope="col">Is Active Member</th>
+                    <th scope="col">Estimated Salary</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for d in data%}
+                
+                <tr>
+                    <th scope="row">{{d.RowNumber}}</th>
+                    <td>{{d.CustomerId}}</td>
+                    <td>{{d.Surname}}</td>
+                    <td>{{d.CreditScore}}</td>
+                    <td>{{d.Geography}}</td>
+                    <td>{{d.Gender}}</td>
+                    <td>{{d.Age}}</td>
+                    <td>{{d.Tenure}}</td>
+                    <td>{{d.Balance}}</td>
+                    <td>{{d.NumOfProducts}}</td>
+                    <td>{{d.HasCrCard}}</td>
+                    <td>{{d.IsActiveMember}}</td>
+                    <td>{{d.EstimatedSalary}}</td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script type="text/javascript" language="javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" language="javascript" src="http:////cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="http://cdn.datatables.net/plug-ins/9dcbecd42ad/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+    <script>
+        $(document).ready(function () {
+          $('#form1').on('submit', function (e) {
+            $.ajax({
+              type: "POST",
+              url: '/prediction',
+              data: { text: $('#customerid').val()}
+            })
+            .done(function(data){
+                $('#output').text(data.result)
+                $('#RowNumber').text(data.RowNumber)
+                $('#CustomerId').text(data.CustomerId)
+                $('#Surname').text(data.Surname)
+                $('#CreditScore').text(data.CreditScore)
+                $('#Geography').text(data.Geography)
+                $('#Gender').text(data.Gender)
+                $('#Age').text(data.Age)
+                $('#Tenure').text(data.Tenure)
+                $('#Balance').text(data.Balance)
+                $('#NumOfProducts').text(data.NumOfProducts)
+                $('#HasCrCard').text(data.HasCrCard)
+                $('#IsActiveMember').text(data.IsActiveMember)
+                $('#EstimatedSalary').text(data.EstimatedSalary)
+                $('#predict_result').show()
+            })  
+            e.preventDefault()
+          });
+        });
+      </script>
+</body>
+</html>
