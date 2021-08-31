@@ -3,19 +3,18 @@ import joblib
 import pandas as pd
 import numpy as np
 
-model = joblib.load('xgb_model.pkl')
-encoder = joblib.load('encoder.pkl')
-features = joblib.load('features_selected.pkl')
-sc = joblib.load('standardscaler.pkl')
+model = joblib.load('./model_prediction/xgb_model.pkl')
+encoder = joblib.load('./model_prediction/encoder.pkl')
+features = joblib.load('./model_prediction/features_selected.pkl')
+sc = joblib.load('./model_prediction/standardscaler.pkl')
 
 def churn_prediction(series):
-    column_numeric = ['CreditScore','Age','Balance','EstimatedSalary']
-    column_category = ['Geography','Gender','Tenure','NumOfProducts','HasCrCard','IsActiveMember']
-    thresholdOpt = 0.3366
+    column_numeric = ['CreditScore','Age','Balance','Tenure','NumOfProducts','EstimatedSalary']
+    column_category = ['Geography','Gender','HasCrCard','IsActiveMember']
+    thresholdOpt = 0.4297
 
     type_changed = series.drop(columns=['RowNumber','CustomerId','Surname','Exited'])
-    #type_changed = idx_droped.astype({"Geography":'category',"Gender":'category',"Tenure":'category',"NumOfProducts":'category',"HasCrCard":'category',"IsActiveMember":'category',"Exited":'category'})
-    
+
     data = type_changed.iloc[0,:]
     #Data scaling
     numeric = data[column_numeric]
